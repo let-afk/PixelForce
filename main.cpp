@@ -2,6 +2,14 @@
 #include<GLFW/glfw3.h>
 #include<glm/glm.hpp>
 #include<iostream>
+#include"window.h"
+
+/**
+ * @brief 
+ * compile with command: g++ main.cpp window.cpp -lglew32 -lglu32 -lopengl32 -lglfw3
+ * 
+ * @warning  возможны баги
+ */
 
 int main() {
 
@@ -10,21 +18,7 @@ int main() {
         return -1;
     }
 
-    glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL
-
-    GLFWwindow * window = glfwCreateWindow(1024, 768, "PixelForce", NULL, NULL);
-
-    if (window == NULL) {
-        std::cout << "Failed to create window\n";
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
+    Window window(1024, 768, WINDOW_DEFAULT_NAME, NULL, NULL);
 
     if (glewInit() != GLEW_OK) {
         std::cout << "Failed to initialize GLEW\n";
@@ -32,17 +26,18 @@ int main() {
         return -1;
     }
 
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    //glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     do {
         glClear(GL_COLOR_BUFFER_BIT);
 
 
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window.GetGLFWwindow());
         glfwPollEvents();
-    } while ((glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS) and (glfwWindowShouldClose(window) == 0));
+    } while (window.IsOpened());
     
+    glfwTerminate();
     
     return 0;
 }
