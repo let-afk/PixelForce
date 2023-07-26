@@ -17,7 +17,7 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor, G
     if (window == NULL) {
         std::cout << "Failed to create window\n";
         glfwTerminate();
-        return ;
+        throw(errno);
     }
 
     glfwMakeContextCurrent(window);
