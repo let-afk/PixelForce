@@ -1,5 +1,5 @@
 CC = g++
-SOURCE = window.cpp shader.cpp
+SOURCE = window.cpp shader.cpp VBO.cpp EBO.cpp VAO.cpp
 #HEADER = $(SOURCE:.cpp=.h)
 OBJECT = $(SOURCE:.cpp=.o)
 #FLAGS = 

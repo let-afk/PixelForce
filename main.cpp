@@ -5,7 +5,26 @@
 
 #include"window.h"
 #include"shader.h"
+#include"EBO.h"
+#include"VBO.h"
+#include"VAO.h"
 
+//vertex coordinate
+GLfloat vertices [] = {
+    -1.0f, -1.0f, 0.0f,// lower left corner
+	 1.0f, -1.0f, 0.0f,// lower right corner
+	 0.0f,  1.0f, 0.0f,// upper corner
+    -0.5f,  0.0f, 0.0f,// inner left
+     0.0f, -1.0f, 0.0f,// inner down
+     0.5f,  0.0f, 0.0f // inner right 
+};
+
+//indexes for vertex order
+GLuint indices[] = {
+    0, 3, 4, //lower left triangle
+    3, 2, 5, //upper triangle
+    4, 5, 1  //lower right triangle
+};
 
 int main() {
     if (not glfwInit()) {
@@ -25,60 +44,40 @@ int main() {
 
     //glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-    GLfloat vertices [] = {
-        -1.0f, -1.0f, 0.0f,// lower left corner
-		 1.0f, -1.0f, 0.0f,// lower right corner
-		 0.0f,  1.0f, 0.0f,// upper corner
-         -0.5f, 0.0f, 0.0f,// inner left
-         0.0f, -1.0f, 0.0f,// inner down
-         0.5f, 0.0f, 0.0f  // inner right 
-    };
+    VAO VAO1;
+	VAO1.Bind();
+    
+    VBO VBO1(vertices, sizeof(vertices));
 
-    GLuint indices[] = {
-        0, 3, 4, //lower left triangle
-        3, 2, 5, //upper triangle
-        4, 5, 1  //lower right triangle
-    };
-
+    EBO EBO1(indices, sizeof(indices));
+    
     // Create reference containers for the Vartex Array Object, the Vertex Buffer Object and the Element Buffer Object
-    GLuint VAO, VBO, EBO;
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    //Link VBO to VAO
+    VAO1.LinkVBO(VBO1, 0);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    VAO1.Unbind();
+    VBO1.Unbind();
+    EBO1.Unbind();
 
     do {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shaderProgram.Active();
-        glBindVertexArray(VAO);
+        VAO1.Bind();
+
         //glDrawArrays(GL_TRIANGLES, 0, 3);
+
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window.GetGLFWwindow());
         glfwPollEvents();
     } while (window.IsOpened());
     
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    VAO1.Delete();
+    VBO1.Delete();
+    EBO1.Delete();
     shaderProgram.Delete();
 
     glfwTerminate();

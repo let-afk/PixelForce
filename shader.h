@@ -29,8 +29,8 @@ struct Shader
     /**
      * @brief read the file's content and store it in the string
      * 
-     * @param file 
-     * @return string 
+     * @param file filepath
+     * @return string content of the file
      */
     std::string ReadFile(const char * file);
 };
