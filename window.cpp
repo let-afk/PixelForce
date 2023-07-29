@@ -21,6 +21,22 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor, G
     }
 
     glfwMakeContextCurrent(window);
+
+    //load image
+    //int imageWidth, imageHeight;
+    //int channels;
+    //unsigned char * pixels = stbi_load("icons/icon32.png", &imageWidth, &imageHeight, &channels, 0);
+
+    //change window icon
+    //GLFWimage images[1];
+    //images[0].width = imageWidth;
+    //images[0].height = imageHeight;
+    //images[0].pixels = pixels;
+    //images[0] = load_icon()
+
+    //stbi_image_free(pixels);
+
+    //glfwSetWindowIcon(window, 1, images);
 }
 
 Window::~Window()

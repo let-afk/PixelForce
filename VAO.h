@@ -17,8 +17,9 @@ struct VAO
     //Unbind the VAO
     void Unbind();
 
-    void LinkVBO(VBO & VBO, GLuint layout);
-
+    //void LinkVBO(VBO & VBO, GLuint layout);
+    void LinkAttrib(VBO & VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
+    
     //Delete the VAO
     void Delete();
 };

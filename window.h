@@ -4,6 +4,9 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
 
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image/stb_image.h"
+
 #define WINDOW_DEFAULT_WIDTH 1024
 #define WINDOW_DEFAULT_HEIGHT 768
 #define WINDOW_DEFAULT_NAME "PixelForce"
