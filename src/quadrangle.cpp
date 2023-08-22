@@ -8,7 +8,7 @@
 
 void Quadrangle::SettingGL()
 {
-    this->ourShader = Shader("shaders/texture.vert", "shaders/texture.frag");
+    this->ourShader = Shader((this->shader_path + ".vert").c_str(), (this->shader_path + ".frag").c_str());
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
     glGenBuffers(1, &this->EBO);
@@ -22,21 +22,19 @@ void Quadrangle::SettingGL()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(this->indices), this->indices, GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
     glEnableVertexAttribArray(0);
-    // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
     // TexCoord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(6 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);
 }
 
-Quadrangle::Quadrangle(GLfloat vertices[32])
+Quadrangle::Quadrangle(GLfloat vertices[20], std::string shader_path)
 {
-    for (int i = 0; i < 32; i++)
+    this->shader_path = shader_path;
+    for (int i = 0; i < 20; i++)
         this->vertices[i] = vertices[i];
     this->SettingGL();
 }
@@ -51,13 +49,9 @@ Quadrangle::~Quadrangle()
 
 void Quadrangle::Draw()
 {
-    // GLint vertexColorLocation = glGetUniformLocation(this->ourShader.ID, "ourColor");
-
     if (this->tex_id != 0)
         glBindTexture(GL_TEXTURE_2D, this->tex_id);
     this->ourShader.Active();
-    // if (vertexColorLocation != -1)
-    //     glUniform4f(vertexColorLocation, this->color[0], this->color[1], this->color[2], 1.0f);
     glBindVertexArray(this->VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

@@ -15,4 +15,4 @@ $(OBJECT): $(SOURCE) Makefile
 main.o: main.cpp Makefile
 	$(CC) -c main.cpp $(GL_FLAGS)
 clean:
-	del *.o*
+	del *.o

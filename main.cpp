@@ -13,16 +13,21 @@ int main()
 {
     Window window_object = Window();
 
-    GLfloat vertices[] = {
-        // Positions          // Colors     // Texture Coords
-        0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-        0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-        -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-
-    Quadrangle quad = Quadrangle(vertices);
-
+    GLfloat vertices_quad[] = {
+        // Positions  // Texture Coords
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f};
+    Quadrangle quad = Quadrangle(vertices_quad);
     quad.SetTexture("images/tree.jpg");
+
+    GLfloat vertices_tri[] = {
+        -1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -1.0f, 0.5f, 0.0f, 0.0f, 1.0f};
+    Triangle tri = Triangle(vertices_tri);
+    tri.SetTexture("images/tree.jpg");
 
     while (!glfwWindowShouldClose(window_object.window))
     {
@@ -32,6 +37,7 @@ int main()
         // code
         window_object.Clear();
         quad.Draw();
+        tri.Draw();
 
         glfwSwapBuffers(window_object.window);
     }
