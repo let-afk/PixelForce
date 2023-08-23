@@ -8,7 +8,7 @@
 
 void Quadrangle::SettingGL()
 {
-    this->ourShader = Shader((this->shader_path + ".vert").c_str(), (this->shader_path + ".frag").c_str());
+    this->ourShader = Shader(("shaders/" + this->shader_path + ".vert").c_str(), ("shaders/" + this->shader_path + ".frag").c_str());
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
     glGenBuffers(1, &this->EBO);
@@ -57,7 +57,7 @@ void Quadrangle::Draw()
     glBindVertexArray(0);
 }
 
-void Quadrangle::SetTexture(const char *name_image)
+void Quadrangle::SetTexture(std::string name_image)
 {
     GLuint texture;
     glGenTextures(1, &texture);
@@ -71,7 +71,7 @@ void Quadrangle::SetTexture(const char *name_image)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int width, height;
-    unsigned char *image = stbi_load(name_image, &width, &height, 0, STBI_rgb);
+    unsigned char *image = stbi_load(("images/" + name_image).c_str(), &width, &height, 0, STBI_rgb);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(image);

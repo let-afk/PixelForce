@@ -38,6 +38,8 @@ Window::Window(int width, int height)
 
     glfwGetFramebufferSize(window, &this->height, &this->width);
     glViewport(0, 0, width, height);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 }
 
 Window::~Window()
@@ -49,7 +51,7 @@ void Window::Clear(GLclampf red, GLclampf green, GLclampf blue)
 {
     // fills the window with one color
     glClearColor(red, green, blue, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void close_window_esc(GLFWwindow *window, int key, int scancode, int action, int mode)

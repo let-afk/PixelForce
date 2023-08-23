@@ -15,12 +15,12 @@ struct Quadrangle
     GLuint VBO, VAO, EBO;
     std::string shader_path;
     GLuint tex_id = 0;
-    Quadrangle(GLfloat vertices[20], std::string shader_path = "shaders/texture");
+    Quadrangle(GLfloat vertices[20], std::string shader_path = "texture");
     Quadrangle() = default;
     ~Quadrangle();
     void SettingGL();
     void Draw();
-    void SetTexture(const char *name_image);
+    void SetTexture(std::string name_image);
 };
 
 #endif

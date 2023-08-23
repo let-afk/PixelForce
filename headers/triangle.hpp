@@ -16,12 +16,12 @@ struct Triangle
     Shader ourShader;
     std::string shader_path;
     GLuint VBO, VAO;
-    Triangle(GLfloat vertices[15], std::string shader_path = "shaders/texture");
+    Triangle(GLfloat vertices[15], std::string shader_path = "texture");
     Triangle() = default;
     ~Triangle();
     void SettingGL();
     void Draw();
-    void SetTexture(const char *name_image);
+    void SetTexture(std::string name_image);
 };
 
 #endif
