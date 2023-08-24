@@ -45,14 +45,15 @@ Cube::~Cube()
     this->ourShader.Delete();
 }
 
-void Cube::Draw()
+void Cube::Draw(glm::vec3 pos, float angle, glm::vec3 axis_rot)
 {
     if (this->tex_id != 0)
         glBindTexture(GL_TEXTURE_2D, this->tex_id);
     this->ourShader.Active();
     // random position
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::lookAt(glm::vec3(4, 3, -3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    model = glm::rotate(model, glm::radians(angle), axis_rot);
+    glm::mat4 view = glm::lookAt(pos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (GLfloat)1920 / (GLfloat)1080, 0.1f, 100.0f);
     this->MVP = projection * view * model;
     // Get their uniform location
@@ -60,6 +61,18 @@ void Cube::Draw()
     // Pass them to the shaders
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(this->MVP[0][0]));
     glBindVertexArray(this->VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+}
+
+void Cube::Add(glm::vec3 pos, float angle, glm::vec3 axis_rot)
+{
+    glBindVertexArray(this->VAO);
+    glm::mat4 model = this->MVP;
+    model = glm::translate(model, pos);
+    model = glm::rotate(model, glm::radians(angle), axis_rot);
+    GLint MatrixID = glGetUniformLocation(this->ourShader.ID, "MVP");
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(model[0][0]));
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 }

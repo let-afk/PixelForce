@@ -20,7 +20,8 @@ struct Cube
     Cube() = default;
     ~Cube();
     void SettingGL();
-    void Draw();
+    void Draw(glm::vec3 pos = glm::vec3(0, 0, -10), float angle = 90.0f, glm::vec3 axis_rot = glm::vec3(1, 0, 0));
+    void Add(glm::vec3 pos, float angle = 0.0f, glm::vec3 axis_rot = glm::vec3(1.0f, 0.0f, 0.0f));
     void SetTexture(std::string name_image);
 };
 

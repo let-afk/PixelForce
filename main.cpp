@@ -56,8 +56,26 @@ int main()
         0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
         -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
         -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
+
+    glm::vec3 cubePositions[] = {
+        glm::vec3(1.0f, 0.0f, 0.0f),
+        glm::vec3(2.0f, 0.0f, 0.0f),
+        glm::vec3(3.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec3(1.0f, 0.0f, 1.0f),
+        glm::vec3(2.0f, 0.0f, 1.0f),
+        glm::vec3(3.0f, 0.0f, 1.0f),
+        glm::vec3(0.0f, 0.0f, 2.0f),
+        glm::vec3(1.0f, 0.0f, 2.0f),
+        glm::vec3(2.0f, 0.0f, 2.0f),
+        glm::vec3(3.0f, 0.0f, 2.0f),
+        glm::vec3(0.0f, 0.0f, 3.0f),
+        glm::vec3(1.0f, 0.0f, 3.0f),
+        glm::vec3(2.0f, 0.0f, 3.0f),
+        glm::vec3(3.0f, 0.0f, 3.0f)};
+
     Cube cube = Cube(vertices_cube);
-    cube.SetTexture("tree.jpg");
+    cube.SetTexture("wood.jpg");
 
     while (!glfwWindowShouldClose(window_object.window))
     {
@@ -66,7 +84,10 @@ int main()
 
         // code
         window_object.Clear();
+
         cube.Draw();
+        for (const auto &pos : cubePositions)
+            cube.Add(pos);
 
         glfwSwapBuffers(window_object.window);
     }
