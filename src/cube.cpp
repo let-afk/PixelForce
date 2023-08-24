@@ -53,9 +53,9 @@ void Cube::Draw(glm::vec3 pos, float angle, glm::vec3 axis_rot)
     // random position
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::rotate(model, glm::radians(angle), axis_rot);
-    glm::mat4 view = glm::lookAt(pos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    model = glm::translate(model, pos);
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (GLfloat)1920 / (GLfloat)1080, 0.1f, 100.0f);
-    this->MVP = projection * view * model;
+    this->MVP = projection * model;
     // Get their uniform location
     GLint MatrixID = glGetUniformLocation(this->ourShader.ID, "MVP");
     // Pass them to the shaders
