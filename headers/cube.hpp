@@ -11,7 +11,7 @@
 struct Cube
 {
     GLfloat vertices[180];
-    glm::mat4 MVP;
+    glm::mat4 model;
     Shader ourShader;
     GLuint VBO, VAO;
     std::string shader_path;

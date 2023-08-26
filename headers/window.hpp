@@ -9,14 +9,14 @@
 
 struct Window
 {
+    static inline bool keys[1024];
     GLFWwindow *window;
     int width, height;
-
     Window(int width = 1920, int height = 1080);
     ~Window();
     void Clear(GLclampf red = 0.5f, GLclampf green = 0.5f, GLclampf blue = 0.5f);
 };
 
-void close_window_esc(GLFWwindow *window, int key, int scancode, int action, int mode);
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
 
 #endif

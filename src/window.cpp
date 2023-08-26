@@ -26,7 +26,7 @@ Window::Window(int width, int height)
     }
 
     glfwMakeContextCurrent(window);
-    glfwSetKeyCallback(window, close_window_esc);
+    glfwSetKeyCallback(window, key_callback);
 
     // GLEW base settings
     glewExperimental = GL_TRUE;
@@ -54,8 +54,15 @@ void Window::Clear(GLclampf red, GLclampf green, GLclampf blue)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void close_window_esc(GLFWwindow *window, int key, int scancode, int action, int mode)
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            Window::keys[key] = true;
+        else if (action == GLFW_RELEASE)
+            Window::keys[key] = false;
+    }
 }
