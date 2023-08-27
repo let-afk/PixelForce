@@ -13,8 +13,11 @@
 
 int main()
 {
+    // necessarily in this order
     Window window_object = Window();
     Camera cam_obj = Camera();
+    window_object.camera_obj = &cam_obj;
+    window_object.set_callback();
 
     float vertices_cube[] = {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -85,7 +88,7 @@ int main()
         cam_obj.move();
         // code
         window_object.Clear();
-        cam_obj.activate(window_object);
+        cam_obj.activate(window_object.height, window_object.width);
         cube.Draw();
         for (const auto &pos : cubePositions)
             cube.Add(pos);
