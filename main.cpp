@@ -80,7 +80,9 @@ int main()
         glm::vec3(3.0f, 3.0f, 0.0f)};
 
     Cube cube = Cube(vertices_cube);
+    Cube cube1 = Cube(vertices_cube);
     cube.SetTexture("wood.jpg");
+    cube1.SetTexture("stone.jpg");
     while (!glfwWindowShouldClose(window_object.window))
     {
         // check events and call callback functions
@@ -90,9 +92,12 @@ int main()
         window_object.Clear();
         cam_obj.activate(window_object.height, window_object.width);
         cube.Draw();
+        cube1.Draw(glm::vec3(5.0f, 0.0f, 0.0f));
         for (const auto &pos : cubePositions)
+        {
             cube.Add(pos);
-
+            cube1.Add(-pos);
+        }
         glfwSwapBuffers(window_object.window);
     }
     glfwTerminate();

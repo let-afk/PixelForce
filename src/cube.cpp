@@ -62,10 +62,13 @@ void Cube::Draw(glm::vec3 pos, float angle, glm::vec3 axis_rot)
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Cube::Add(glm::vec3 pos, float angle, glm::vec3 axis_rot)
 {
+    if (this->tex_id != 0)
+        glBindTexture(GL_TEXTURE_2D, this->tex_id);
     glBindVertexArray(this->VAO);
     glm::mat4 new_model = this->model;
     new_model = glm::translate(new_model, pos);
@@ -74,14 +77,17 @@ void Cube::Add(glm::vec3 pos, float angle, glm::vec3 axis_rot)
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(new_model[0][0]));
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Cube::SetTexture(std::string name_image)
 {
     GLuint texture;
     glGenTextures(1, &texture);
+    // this->tex_id_ind = this->tex_id.size();
+    // this->tex_id.push_back(texture);
     this->tex_id = texture;
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, this->tex_id);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

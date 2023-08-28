@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <vector>
 #include "shader.h"
 
 #ifndef PF_CUBE_H
@@ -13,9 +14,10 @@ struct Cube
     GLfloat vertices[180];
     glm::mat4 model;
     Shader ourShader;
+    // static inline std::vector<GLuint> tex_id;
     GLuint VBO, VAO;
     std::string shader_path;
-    GLuint tex_id = 0;
+    GLuint tex_id;
     Cube(GLfloat vertices[180], std::string shader_path = "trans_tex");
     Cube() = default;
     ~Cube();
