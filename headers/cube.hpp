@@ -4,7 +4,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <vector>
+
 #include "shader.h"
+#include "VAO.hpp"
+#include "VBO.hpp"
 
 #ifndef PF_CUBE_H
 #define PF_CUBE_H
@@ -14,8 +17,8 @@ struct Cube
     GLfloat vertices[180];
     glm::mat4 model;
     Shader ourShader;
-    // static inline std::vector<GLuint> tex_id;
-    GLuint VBO, VAO;
+    VAO vao_obj;
+    VBO vbo_obj;
     std::string shader_path;
     GLuint tex_id;
     Cube(GLfloat vertices[180], std::string shader_path = "trans_tex");

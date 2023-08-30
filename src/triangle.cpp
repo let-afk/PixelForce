@@ -8,25 +8,16 @@
 void Triangle::SettingGL()
 {
     this->ourShader = Shader(("shaders/" + this->shader_path + ".vert").c_str(), ("shaders/" + this->shader_path + ".frag").c_str());
-    glGenVertexArrays(1, &this->VAO);
-    glGenBuffers(1, &this->VBO);
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-    glBindVertexArray(this->VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
+    this->vao_obj.Bind();
+    this->vbo_obj = VBO(this->vertices, sizeof(this->vertices));
     // GL_STATIC_DRAW: the data will either never change, or it will change very rarely;
     // GL_DYNAMIC_DRAW: the data will change quite often;
     // GL_STREAM_DRAW: the data will change with each rendering.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
-    glEnableVertexAttribArray(0);
+    this->vao_obj.LinkAttrib(this->vbo_obj, 0, 3, GL_FLOAT, 5 * sizeof(GLfloat), (GLvoid *)0);
     // TexCoord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-
-    glBindVertexArray(0);
+    this->vao_obj.LinkAttrib(this->vbo_obj, 1, 2, GL_FLOAT, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+    this->vao_obj.Unbind();
 }
 
 Triangle::Triangle(GLfloat vertices[15], std::string shader_path)
@@ -39,8 +30,8 @@ Triangle::Triangle(GLfloat vertices[15], std::string shader_path)
 
 Triangle::~Triangle()
 {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    this->vao_obj.Delete();
+    this->vbo_obj.Delete();
     this->ourShader.Delete();
 }
 
@@ -49,9 +40,9 @@ void Triangle::Draw()
     if (this->tex_id != 0)
         glBindTexture(GL_TEXTURE_2D, this->tex_id);
     this->ourShader.Active();
-    glBindVertexArray(this->VAO);
+    this->vao_obj.Bind();
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    glBindVertexArray(0);
+    this->vao_obj.Unbind();
 }
 
 void Triangle::SetTexture(std::string name_image)

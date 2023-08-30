@@ -90,7 +90,7 @@ int main()
         cam_obj.move();
         // code
         window_object.Clear();
-        cam_obj.activate(window_object.height, window_object.width);
+        cam_obj.activate(window_object.width, window_object.height);
         cube.Draw();
         cube1.Draw(glm::vec3(5.0f, 0.0f, 0.0f));
         for (const auto &pos : cubePositions)

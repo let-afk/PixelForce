@@ -12,22 +12,12 @@
 void Cube::SettingGL()
 {
     this->ourShader = Shader(("shaders/" + this->shader_path + ".vert").c_str(), ("shaders/" + this->shader_path + ".frag").c_str());
-    glGenVertexArrays(1, &this->VAO);
-    glGenBuffers(1, &this->VBO);
-    // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-    glBindVertexArray(this->VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
-
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
-    glEnableVertexAttribArray(0);
-    // TexCoord attribute
+    this->vao_obj.Bind();
+    this->vbo_obj = VBO(this->vertices, sizeof(this->vertices));
+    this->vao_obj.LinkAttrib(this->vbo_obj, 0, 3, GL_FLOAT, 5 * sizeof(GLfloat), (GLvoid *)0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0);
+    this->vao_obj.LinkAttrib(this->vbo_obj, 1, 2, GL_FLOAT, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+    this->vao_obj.Unbind();
 }
 
 Cube::Cube(GLfloat vertices[180], std::string shader_path)
@@ -40,8 +30,8 @@ Cube::Cube(GLfloat vertices[180], std::string shader_path)
 
 Cube::~Cube()
 {
-    glDeleteVertexArrays(1, &this->VAO);
-    glDeleteBuffers(1, &this->VBO);
+    this->vao_obj.Delete();
+    this->vbo_obj.Delete();
     this->ourShader.Delete();
 }
 
@@ -50,7 +40,6 @@ void Cube::Draw(glm::vec3 pos, float angle, glm::vec3 axis_rot)
     if (this->tex_id != 0)
         glBindTexture(GL_TEXTURE_2D, this->tex_id);
     this->ourShader.Active();
-    // random position
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::rotate(model, glm::radians(angle), axis_rot);
     model = glm::translate(model, pos);
@@ -59,9 +48,9 @@ void Cube::Draw(glm::vec3 pos, float angle, glm::vec3 axis_rot)
     GLint MatrixID = glGetUniformLocation(this->ourShader.ID, "model");
     // Pass them to the shaders
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(this->model[0][0]));
-    glBindVertexArray(this->VAO);
+    this->vao_obj.Bind();
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    this->vao_obj.Unbind();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -69,14 +58,14 @@ void Cube::Add(glm::vec3 pos, float angle, glm::vec3 axis_rot)
 {
     if (this->tex_id != 0)
         glBindTexture(GL_TEXTURE_2D, this->tex_id);
-    glBindVertexArray(this->VAO);
+    this->vao_obj.Bind();
     glm::mat4 new_model = this->model;
     new_model = glm::translate(new_model, pos);
     new_model = glm::rotate(new_model, glm::radians(angle), axis_rot);
     GLint MatrixID = glGetUniformLocation(this->ourShader.ID, "model");
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &(new_model[0][0]));
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    this->vao_obj.Unbind();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -84,8 +73,6 @@ void Cube::SetTexture(std::string name_image)
 {
     GLuint texture;
     glGenTextures(1, &texture);
-    // this->tex_id_ind = this->tex_id.size();
-    // this->tex_id.push_back(texture);
     this->tex_id = texture;
     glBindTexture(GL_TEXTURE_2D, this->tex_id);
 
