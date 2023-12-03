@@ -1,10 +1,18 @@
 CC = g++
-CFLAGLIB = -lglew32 -lglu32 -lopengl32 -lglfw3
+# CFLAGS = -Wall -g
+GL_FLAGS = -lglew32 -lglu32 -lopengl32 -lglfw3
 
-PixelForce: main.o window.o Makefile
-	$(CC) -o PixelForce main.o window.o $(CFLAGLIB)
-window.o: window.cpp Makefile
-	$(CC) -c window.cpp $(CFLAGLIB)
+SRC_DIR = src
+
+SOURCE = $(wildcard $(SRC_DIR)/*.cpp)
+SOURCE := $(filter-out $(SRC_DIR)/main.cpp, $(SOURCE))
+OBJECT = $(patsubst $(SRC_DIR)/%.cpp,./%.o,$(SOURCE))
+
+PixelForce: main.o $(OBJECT) Makefile
+	$(CC) -o PixelForce main.o $(OBJECT) $(GL_FLAGS)
+$(OBJECT): $(SOURCE) Makefile
+	$(CC) -c $(SOURCE) $(GL_FLAGS) 
 main.o: main.cpp Makefile
-	$(CC) -c main.cpp $(CFLAGLIB)
-
+	$(CC) -c main.cpp $(GL_FLAGS)
+clean:
+	del *.o *.exe
